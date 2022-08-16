@@ -27,14 +27,14 @@ public:
     bool empty() const { return _size == 0; }
     int size() const { return _size; }
     T& get(int index) const;
-    int index_of(const T& element) const;
+    int index_of(const T& value) const;
     void erase(int index);
-    void insert(int index, const T& element);
-    void push_back(const T& element);
+    void insert(int index, const T& value);
+    void push_back(const T& value);
     void clear();
 
     // more
-    int capacity() const { return capacity; }
+    int capacity() const { return _capacity; }
 
     // iterator
     class iterator;
@@ -52,7 +52,7 @@ protected:
 
 template <class T>
 ArrayList<T>::ArrayList(int initialCapacity) {
-    assert(initialCapacity > 0);
+    assert(initialCapacity > 1);
     _capacity = initialCapacity;
     _array = new T[_capacity];
 }
@@ -72,8 +72,8 @@ T& ArrayList<T>::get(int index) const {
 }
 
 template <class T>
-int ArrayList<T>::index_of(const T& element) const {
-    int index = (int)(std::find(_array, _array + _size, element) - _array);
+int ArrayList<T>::index_of(const T& value) const {
+    int index = (int)(std::find(_array, _array + _size, value) - _array);
     return (index == _size) ? -1 : index;
 }
 
@@ -84,26 +84,26 @@ void ArrayList<T>::erase(int index) {
     _array[--_size].~T();
 
     if (_size < _capacity / 4) {
-        _setCapacity(_capacity / 4);
+        _setCapacity(_capacity / 2);
     }
 }
 
 template <class T>
-void ArrayList<T>::insert(int index, const T& element) {
+void ArrayList<T>::insert(int index, const T& value) {
     assert(index >= 0 && index <= _size);
 
     if (_size == _capacity) {
-        _setCapacity(_capacity << 1);
+        _setCapacity(_capacity * 1.5);
     }
 
-    std::copy_backward(_array + _size, _array + index, _array + index + 1);
-    _array[index] = element;
+    std::copy_backward(_array + index, _array + _size, _array + _size + 1);
+    _array[index] = value;
     _size++;
 }
 
 template <class T>
-void ArrayList<T>::push_back(const T& element) {
-    insert(_size, element);
+void ArrayList<T>::push_back(const T& value) {
+    insert(_size, value);
 }
 
 template <class T>
@@ -111,6 +111,8 @@ void ArrayList<T>::clear() {
     while (_size) {
         _array[--_size].~T();
     }
+
+    _setCapacity(2);
 }
 
 template <class T>
@@ -123,7 +125,41 @@ void ArrayList<T>::_setCapacity(int newCapacity) {
     _capacity = newCapacity;
 }
 
+template <class T>
+class ArrayList<T>::iterator {
+public:
+    // 代表双向迭代器
 
+    explicit iterator(T* thePosition = 0) { position = thePosition; }
+
+    T& operator*() const { return *position; }
+    T* operator->() const { return &*position; }
+
+    iterator& operator++() { ++position; return *this; }
+    iterator operator++(int) {
+        iterator old = *this;
+        ++position;
+        return old;
+    }
+
+    iterator& operator--() { --position; return *this; }
+    iterator operator--(int) {
+        iterator old = *this;
+        --position;
+        return old;
+    }
+
+    bool operator!=(const iterator right) const {
+        return position != right.position;
+    }
+
+    bool operator==(const iterator right) const {
+        return position == right.position;
+    }
+
+protected:
+    T* position;
+};
 
 
 

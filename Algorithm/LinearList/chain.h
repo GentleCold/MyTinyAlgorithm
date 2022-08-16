@@ -13,7 +13,20 @@ namespace myalm {
 
 // declare
 
-template<class T>
+template <class T>
+struct ChainNode {
+    T value;
+    ChainNode<T> *next = nullptr;
+
+    ChainNode() = default;
+    explicit ChainNode(const T& value) { this -> value = value; }
+    ChainNode(const T& value, ChainNode<T> *next) {
+        this -> value = value;
+        this -> next = next;
+    }
+};
+
+template <class T>
 class Chain : public LinearList<T> {
 public:
     Chain(int initialCapacity = 10);

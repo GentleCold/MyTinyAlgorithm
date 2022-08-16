@@ -9,7 +9,7 @@
 template <class T>
 class LinearList {
 public:
-    virtual ~LinearList() {};
+    virtual ~LinearList() = default;
     virtual bool empty() const = 0;
     virtual int size() const = 0;
     virtual T& get(int index) const = 0;
