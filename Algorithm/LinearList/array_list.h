@@ -35,6 +35,7 @@ public:
 
     // more
     int capacity() const { return _capacity; }
+    T& operator[](int index) const { return get(index); }
 
     // iterator
     class iterator;

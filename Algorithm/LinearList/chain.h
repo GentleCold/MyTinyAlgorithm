@@ -43,6 +43,8 @@ public:
     void push_back(const T& value);
     void clear();
 
+    // more
+    T& operator[](int index) const { return get(index); }
 
     // iterator
     class iterator;

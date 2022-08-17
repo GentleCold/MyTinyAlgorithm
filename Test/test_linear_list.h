@@ -19,8 +19,8 @@ static void test_array_list() {
     v.push_back(3);
     myalm::ArrayList<int> v1(v);
     EXPECT_EQ_INT(16, std::accumulate(v1.begin(), v1.end(), 0));
-    EXPECT_EQ_INT(11, v1.get(0));
-    EXPECT_EQ_INT(3, v1.get(2));
+    EXPECT_EQ_INT(11, v1[0]);
+    EXPECT_EQ_INT(3, v1[2]);
     EXPECT_EQ_INT(1, v1.index_of(2));
     EXPECT_EQ_INT(-1, v1.index_of(100));
     EXPECT_EQ_INT(3, v1.size());
@@ -34,6 +34,15 @@ static void test_array_list() {
     v1.push_back(1);
     v1.erase(0);
     EXPECT_EQ_INT(2, v1.capacity());
+
+//    // test for pressure
+//    for (int i = 0; i < 100000; i++) {
+//        v1.push_back(i);
+//        EXPECT_EQ_INT(i, v1.get(i));
+//    }
+//
+//    v1.clear();
+//    EXPECT_EQ_INT(2, v1.capacity());
 }
 
 static void test_chain() {
@@ -45,8 +54,8 @@ static void test_chain() {
     v.push_back(3);
     myalm::Chain<int> v1(v);
     EXPECT_EQ_INT(16, std::accumulate(v1.begin(), v1.end(), 0));
-    EXPECT_EQ_INT(11, v1.get(0));
-    EXPECT_EQ_INT(3, v1.get(2));
+    EXPECT_EQ_INT(11, v1[0]);
+    EXPECT_EQ_INT(3, v1[2]);
     EXPECT_EQ_INT(1, v1.index_of(2));
     EXPECT_EQ_INT(-1, v1.index_of(100));
     EXPECT_EQ_INT(3, v1.size());
