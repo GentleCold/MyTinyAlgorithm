@@ -9,3 +9,6 @@
 | ArrayList | 基于数组的线性表 | -                                 |
 | Chain     | 基于链表的线性表 | bin_sort, radix_sort, convex_hull |
 
+## LICENCE
+
+MIT

@@ -10,5 +10,5 @@ set(SOURCE_PATH ${CMAKE_SOURCE_DIR}/Algorithm)
 set(EXECUTABLE_OUTPUT_PATH ${BUILD_PATH}) # EXE
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BUILD_PATH}) # LIB
 
-add_executable(TestAll ${TEST_PATH}/main.cpp)
+add_executable(TestAll ${TEST_PATH}/test_all.cpp)
 
