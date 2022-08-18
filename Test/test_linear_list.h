@@ -35,6 +35,11 @@ static void test_array_list() {
     v1.erase(0);
     EXPECT_EQ_INT(2, v1.capacity());
 
+    v1.insert(0, 1);
+    EXPECT_EQ_INT(1, v1[0]);
+    v1.insert(0, 2);
+    EXPECT_EQ_INT(2, v1[0]);
+
 //    // test for pressure
 //    for (int i = 0; i < 100000; i++) {
 //        v1.push_back(i);
@@ -67,6 +72,11 @@ static void test_chain() {
     EXPECT_EQ_INT(0, v1.size());
     v1.push_back(1);
     v1.erase(0);
+
+    v1.insert(0, 1);
+    EXPECT_EQ_INT(1, v1[0]);
+    v1.insert(0, 2);
+    EXPECT_EQ_INT(2, v1[0]);
 }
 
 void test_linear_list() {

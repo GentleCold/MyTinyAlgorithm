@@ -7,6 +7,7 @@
 #define MYTINYALGORITHM_CHAIN_H
 
 #include "linear_list.h"
+#include <cassert>
 
 namespace myalm {
 
@@ -137,7 +138,7 @@ void Chain<T>::insert(int index, const T& v) {
         index--;
         p = p -> next;
     }
-    p -> next = new ChainNode<T>(v, (p -> next) ? p -> next -> next : nullptr);
+    p -> next = new ChainNode<T>(v, p -> next);
     _size++;
 }
 

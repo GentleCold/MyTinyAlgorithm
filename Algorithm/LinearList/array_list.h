@@ -9,7 +9,6 @@
 #include "linear_list.h"
 #include <cassert>
 #include <algorithm>
-#include <iterator>
 
 namespace myalm {
 
