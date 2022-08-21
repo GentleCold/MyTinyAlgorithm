@@ -11,5 +11,3 @@ set(EXECUTABLE_OUTPUT_PATH ${BUILD_PATH}) # EXE
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BUILD_PATH}) # LIB
 
 add_executable(TestAll ${TEST_PATH}/test_all.cpp)
-add_executable(BinSort ${SOURCE_PATH}/LinearList/Application/bin_sort.cpp)
-add_executable(RadixSort ${SOURCE_PATH}/LinearList/Application/radix_sort.cpp)
