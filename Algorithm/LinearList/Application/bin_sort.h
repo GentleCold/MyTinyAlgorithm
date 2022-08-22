@@ -12,9 +12,11 @@ namespace myalm {
 
 template <class T>
 void bin_sort(Chain<T>& v, int max) {
+    // 新建 max 个桶
     Chain<T> *bin;
     bin = new Chain<T>[max + 1];
 
+    // 放到桶中
     int num = v.size();
     for (int i = 0; i < num; i++) {
         T element = v[0];
@@ -22,6 +24,7 @@ void bin_sort(Chain<T>& v, int max) {
         bin[(unsigned int)element].insert(0, element);
     }
 
+    // 按桶顺序放回原链表
     for (int i = max; i >= 0; i--) {
         while (!bin[i].empty()) {
             T element = bin[i][0];

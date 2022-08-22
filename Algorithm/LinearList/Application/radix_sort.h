@@ -13,6 +13,7 @@ static void _bin_sort(Chain<T>& v, int bit) {
     Chain<T> *bin;
     bin = new Chain<T>[10];
 
+    // 得到 10 ^ bit
     int radix = 1;
     while (bit) {
         bit--;
@@ -40,6 +41,7 @@ static void _bin_sort(Chain<T>& v, int bit) {
 // maxBit 最大位数
 template <class T>
 void radix_sort(myalm::Chain<T>& v, int maxBit) {
+    // 以 bin_sort 进行 maxBit 次排序
     for (int i = 1; i <= maxBit; i++) {
         _bin_sort(v, i);
     }
