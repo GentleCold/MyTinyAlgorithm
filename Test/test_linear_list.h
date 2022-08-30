@@ -9,8 +9,7 @@
 #include "test.h"
 #include "../Algorithm/LinearList/array_list.h"
 #include "../Algorithm/LinearList/chain.h"
-#include "../Algorithm/LinearList/Application/bin_sort.h"
-#include "../Algorithm/LinearList/Application/radix_sort.h"
+#include "../Algorithm/LinearList/Application/sort.h"
 
 // class test
 
@@ -127,12 +126,34 @@ static void test_radix_sort() {
     EXPECT_EQ_TRUE(flag);
 }
 
+static void test_merge_sort() {
+    myalm::ArrayList<int> v;
+
+    for (int i = 0; i < 100; i++) { // 100 numbers
+        int element = rand();
+        v.push_back(element);
+    }
+
+    myalm::merge_sort(v);
+
+    bool flag = true;
+    for (int i = 0; i < 99; i++) {
+        if (v[i] > v[i + 1]) {
+            flag = false;
+            break;
+        }
+    }
+
+    EXPECT_EQ_TRUE(flag);
+}
+
 void test_linear_list() {
     test_array_list();
     test_chain();
 
     test_bin_sort();
     test_radix_sort();
+    test_merge_sort();
 }
 
 #endif //MYTINYALGORITHM_TEST_LINEAR_LIST_H

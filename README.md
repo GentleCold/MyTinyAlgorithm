@@ -4,9 +4,9 @@
 
 ### 已实现模板类 ( still under working )
 
-| 名称        | 描述       | 应用                                |
+| 名称        | 描述       |                应用                 |
 |:---------:|:--------:|:---------------------------------:|
-| ArrayList | 基于数组的线性表 | -                                 |
+| ArrayList | 基于数组的线性表 |            merge_sort             |
 | Chain     | 基于链表的线性表 | bin_sort, radix_sort, convex_hull |
 
 ## LICENCE
