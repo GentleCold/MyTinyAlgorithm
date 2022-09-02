@@ -8,6 +8,8 @@
 #include "test.h"
 #include "../Algorithm/StackAndQueue/array_stack.h"
 #include "../Algorithm/StackAndQueue/array_queue.h"
+#include "../Algorithm/StackAndQueue/priority_queue.h"
+#include "../Algorithm/StackAndQueue/Application/heap_sort.h"
 
 static void test_array_queue() {
     myalm::ArrayQueue<int> v;
@@ -64,9 +66,48 @@ static void test_array_stack() {
     EXPECT_EQ_INT(2, v.top());
 }
 
+static void test_priority_queue() {
+    myalm::PriorityQueue<int> v;
+
+    for (int i = 0; i < 15; i++) {
+        v.push(i);
+    }
+    EXPECT_EQ_INT(14, v.top());
+    for (int i = 0; i < 5; i++) {
+        v.pop();
+    }
+    EXPECT_EQ_INT(9, v.top());
+}
+
+// Application
+
+static void test_heap_sort() {
+    int *v = new int[100];
+
+    for (int i = 0; i < 100; i++) {
+        v[i] = rand();
+    }
+
+    myalm::heap_sort(v, 100);
+
+    bool flag = true;
+    for (int i = 0; i < 99; i++) {
+        if (v[i] > v[i + 1]) {
+            flag = false;
+            break;
+        }
+    }
+
+    EXPECT_EQ_TRUE(flag);
+    delete [] v;
+}
+
 void test_stack_and_queue() {
     test_array_queue();
     test_array_stack();
+    test_priority_queue();
+
+    test_heap_sort();
 }
 
 #endif //MYTINYALGORITHM_TEST_STACK_AND_QUEUE_H

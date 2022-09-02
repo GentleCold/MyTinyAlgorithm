@@ -4,13 +4,14 @@
 
 ### 已实现模板类 ( still under working )
 
-|     名称     |    描述     |                应用                 |
-|:----------:|:---------:|:---------------------------------:|
-| ArrayList  | 基于数组的线性表  |      merge_sort, quick_sort       |
-|   Chain    | 基于链表的线性表  | bin_sort, radix_sort, convex_hull |
-| ArrayQueue | 基于数组的循环队列 |                 -                 |
-| ArrayStack |  基于数组的栈   |                 -                 |
-| BinaryTree | 基于链表的二叉树  |                 -                 |
+|     名称     |     描述      |                应用                 |
+|:----------:|:-----------:|:---------------------------------:|
+| ArrayList  |  基于数组的线性表   |      merge_sort, quick_sort       |
+|   Chain    |  基于链表的线性表   | bin_sort, radix_sort, convex_hull |
+| ArrayQueue |  基于数组的循环队列  |                 -                 |
+| ArrayStack |   基于数组的栈    |                 -                 |
+|  MaxHeap   | 基于数组的最大优先队列 |             heap_sort             |
+| BinaryTree |  基于链表的二叉树   |                 -                 |
 
 ## LICENCE
 

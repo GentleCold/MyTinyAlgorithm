@@ -34,6 +34,7 @@ public:
     // more
     int capacity() const { return _capacity; }
     void push_back(const T& value);
+    void pop_back();
     T& operator[](int index) const { return get(index); }
     void swap(int a, int b);
 
@@ -109,6 +110,15 @@ void ArrayList<T>::push_back(const T& value) {
     }
 
     _array[_size++] = value;
+}
+
+template <class T>
+void ArrayList<T>::pop_back() {
+    _array[--_size].~T();
+
+    if (_size < _capacity / 4) {
+        _setCapacity(_capacity / 2);
+    }
 }
 
 template <class T>

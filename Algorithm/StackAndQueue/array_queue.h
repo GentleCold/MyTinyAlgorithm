@@ -21,8 +21,8 @@ public:
 
     void push(const T& value);
     void pop();
-    T& front() const;
-    T& back() const;
+    const T& front() const;
+    const T& back() const;
 protected:
     void _setCapacity(int newCapacity);
     T* _queue = nullptr;
@@ -81,13 +81,13 @@ void ArrayQueue<T>::pop() {
 }
 
 template <class T>
-T& ArrayQueue<T>::front() const {
+const T& ArrayQueue<T>::front() const {
     assert(_back != _front);
     return _queue[_front];
 }
 
 template <class T>
-T& ArrayQueue<T>::back() const {
+const T& ArrayQueue<T>::back() const {
     assert(_back != _front);
     return _queue[(_back - 1 + _capacity) % _capacity];
 }

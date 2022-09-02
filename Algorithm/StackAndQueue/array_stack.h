@@ -21,7 +21,7 @@ public:
 
     void push(const T& value);
     void pop();
-    T& top() const;
+    const T& top() const;
 protected:
     void _setCapacity(int newCapacity);
     T* _stack = nullptr;
@@ -56,7 +56,7 @@ void ArrayStack<T>::push(const T& value) {
 }
 
 template <class T>
-T& ArrayStack<T>::top() const {
+const T& ArrayStack<T>::top() const {
     assert(_top > 0);
     return _stack[_top - 1];
 }
