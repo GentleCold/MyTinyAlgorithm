@@ -16,7 +16,6 @@ public:
     virtual int index_of(const T& element) const = 0;
     virtual void erase(int index) = 0;
     virtual void insert(int index, const T& element) = 0;
-    virtual void push_back(const T& element) = 0;
     virtual void clear() = 0;
 };
 

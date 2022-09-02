@@ -150,13 +150,6 @@ static void test_merge_sort() {
 static void test_quick_sort() {
     myalm::ArrayList<int> v;
 
-    // test _swap
-    v.push_back(1);
-    v.push_back(1);
-    myalm::_swap(v[0], v[0]);
-    EXPECT_EQ_INT(1, v[0]);
-    v.clear();
-
     for (int i = 0; i < 100; i++) { // 100 numbers
         int element = rand();
         v.push_back(element);

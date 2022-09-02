@@ -29,12 +29,13 @@ public:
     int index_of(const T& value) const;
     void erase(int index);
     void insert(int index, const T& value);
-    void push_back(const T& value);
     void clear();
 
     // more
     int capacity() const { return _capacity; }
+    void push_back(const T& value);
     T& operator[](int index) const { return get(index); }
+    void swap(int a, int b);
 
     // iterator
     class iterator;
@@ -103,7 +104,11 @@ void ArrayList<T>::insert(int index, const T& value) {
 
 template <class T>
 void ArrayList<T>::push_back(const T& value) {
-    insert(_size, value);
+    if (_size == _capacity) {
+        _setCapacity(_capacity * 1.5);
+    }
+
+    _array[_size++] = value;
 }
 
 template <class T>
@@ -113,6 +118,14 @@ void ArrayList<T>::clear() {
     }
 
     _setCapacity(2);
+}
+
+template <class T>
+void ArrayList<T>::swap(int a, int b) {
+    assert(a >= 0 && a < _size && b >= 0 && b < _size);
+    T tmp = get(a);
+    get(a) = get(b);
+    get(b) = tmp;
 }
 
 template <class T>

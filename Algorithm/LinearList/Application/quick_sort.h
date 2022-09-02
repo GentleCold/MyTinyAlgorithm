@@ -10,25 +10,18 @@ namespace myalm {
 
 
 template <class T>
-static inline void _swap(T& a, T& b) {
-    T tmp = a;
-    a = b;
-    b = tmp;
-}
-
-template <class T>
 static int _partition(ArrayList<T>& v, int b, int e) {
     int k = rand() % (e - b) + b, i = b, j = b;
-    _swap(v[k], v[e - 1]);
+    v.swap(k, e - 1);
 
     for (; j < e - 1; j++) {
         if (v[j] < v[e - 1]) {
-            _swap(v[j], v[i]);
+            v.swap(j, i);
             i++;
         }
     }
 
-    _swap(v[i], v[e - 1]);
+    v.swap(i, e - 1);
     return i;
 }
 

@@ -3,9 +3,13 @@
 //
 
 #include "test_linear_list.h"
+#include "test_tree.h"
+#include "test_stack_and_queue.h"
 
 void test_all() {
     test_linear_list();
+    test_tree();
+    test_stack_and_queue();
 }
 
 int main() {

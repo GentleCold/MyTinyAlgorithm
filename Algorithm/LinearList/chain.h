@@ -41,11 +41,12 @@ public:
     int index_of(const T& value) const;
     void erase(int index);
     void insert(int index, const T& value);
-    void push_back(const T& value);
     void clear();
 
     // more
     T& operator[](int index) const { return get(index); }
+    void push_back(const T& value);
+    void swap(int a, int b);
 
     // iterator
     class iterator;
@@ -157,6 +158,14 @@ void Chain<T>::clear() {
     }
     _size = 0;
     _head -> next = nullptr;
+}
+
+template <class T>
+void Chain<T>::swap(int a, int b) {
+    assert(a >= 0 && a < _size && b >= 0 && b < _size);
+    T tmp = get(a);
+    get(a) = get(b);
+    get(b) = tmp;
 }
 
 template <class T>
