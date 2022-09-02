@@ -147,6 +147,34 @@ static void test_merge_sort() {
     EXPECT_EQ_TRUE(flag);
 }
 
+static void test_quick_sort() {
+    myalm::ArrayList<int> v;
+
+    // test _swap
+    v.push_back(1);
+    v.push_back(1);
+    myalm::_swap(v[0], v[0]);
+    EXPECT_EQ_INT(1, v[0]);
+    v.clear();
+
+    for (int i = 0; i < 100; i++) { // 100 numbers
+        int element = rand();
+        v.push_back(element);
+    }
+
+    myalm::quick_sort(v);
+
+    bool flag = true;
+    for (int i = 0; i < 99; i++) {
+        if (v[i] > v[i + 1]) {
+            flag = false;
+            break;
+        }
+    }
+
+    EXPECT_EQ_TRUE(flag);
+}
+
 void test_linear_list() {
     test_array_list();
     test_chain();
@@ -154,6 +182,7 @@ void test_linear_list() {
     test_bin_sort();
     test_radix_sort();
     test_merge_sort();
+    test_quick_sort();
 }
 
 #endif //MYTINYALGORITHM_TEST_LINEAR_LIST_H

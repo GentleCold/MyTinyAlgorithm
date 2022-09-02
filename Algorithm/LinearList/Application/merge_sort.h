@@ -10,7 +10,7 @@
 namespace myalm {
 
 template <class T>
-void _merge(ArrayList<T>& v, int b, int m, int e) {
+static void _merge(ArrayList<T>& v, int b, int m, int e) {
     ArrayList<T> tmp;
     for (int i = b; i < e; i++) {
         tmp.push_back(v[i]);
@@ -31,7 +31,7 @@ void _merge(ArrayList<T>& v, int b, int m, int e) {
 }
 
 template <class T>
-void _merge_sort(ArrayList<T>& v, int b, int e) { // [b, e)
+static void _merge_sort(ArrayList<T>& v, int b, int e) { // [b, e)
     int m;
     if (b < e - 1) {
         m = (b + e) / 2;

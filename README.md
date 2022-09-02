@@ -6,7 +6,7 @@
 
 | 名称        | 描述       |                应用                 |
 |:---------:|:--------:|:---------------------------------:|
-| ArrayList | 基于数组的线性表 |            merge_sort             |
+| ArrayList | 基于数组的线性表 |      merge_sort, quick_sort       |
 | Chain     | 基于链表的线性表 | bin_sort, radix_sort, convex_hull |
 
 ## LICENCE

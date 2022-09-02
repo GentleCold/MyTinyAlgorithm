@@ -8,5 +8,6 @@
 #include "bin_sort.h"
 #include "radix_sort.h"
 #include "merge_sort.h"
+#include "quick_sort.h"
 
 #endif //MYTINYALGORITHM_SORT_H
