@@ -14,19 +14,14 @@ template <class T>
 struct FibHeapNode {
     T value;
     int degree = 0;
-    bool mark = false;
+    // bool mark = false;
 
-    FibHeapNode<T> *p = nullptr,
+    FibHeapNode<T> // *p = nullptr,
                    *child = nullptr,
                    *left = nullptr,
                    *right = nullptr;
 
     explicit FibHeapNode(const T& v) { value = v; left = this; right = this; }
-    FibHeapNode(const T& v, FibHeapNode<T> *l, FibHeapNode<T> *r) {
-        value = v;
-        left = l;
-        right = r;
-    }
 };
 
 template <class T>
@@ -45,6 +40,8 @@ public:
 private:
     void _consolidate();
     void _dispose(FibHeapNode<T> *v);
+    void _link_insert(FibHeapNode<T> *a, FibHeapNode<T> *b);
+    void _link_erase(FibHeapNode<T> *v);
     FibHeapNode<T> *_heap = nullptr;
     FibHeapNode<T> *_max = nullptr;
     int _size = 0;
@@ -70,19 +67,32 @@ void FibPriorityQueue<T>::_dispose(FibHeapNode<T> *v) {
 }
 
 template <class T>
+void FibPriorityQueue<T>::_link_insert(FibHeapNode<T> *a, FibHeapNode<T> *b) {
+    // insert after a
+    b -> right = a -> right;
+    b -> left = a;
+    a -> right -> left = b;
+    a -> right = b;
+}
+
+template <class T>
+void FibPriorityQueue<T>::_link_erase(FibHeapNode<T> *v) {
+    v -> left -> right = v -> right;
+    v -> right -> left = v -> left;
+}
+
+template <class T>
 void FibPriorityQueue<T>::push(const T& v) {
+    auto *x = new FibHeapNode<T>(v);
     if (_heap) {
-        auto *x = new FibHeapNode<T>(v, _heap, _heap -> right);
         // insert
-        x -> left -> right = x;
-        x -> right -> left = x;
+        _link_insert(_heap, x);
 
         if (v > _max -> value) {
             _max = x;
         }
     } else {
         // initialize
-        auto *x = new FibHeapNode<T>(v);
         _heap = x;
         _max = x;
     }
@@ -95,38 +105,33 @@ void FibPriorityQueue<T>::pop() {
     assert(_size > 0);
     FibHeapNode<T> *z = _max;
     if (z) {
-        // delete z and move child to root list
-        while ((z -> degree) > 0) {
-            // z = z;
-            FibHeapNode<T> *tmp = z -> child -> right;
-            z -> child -> p = nullptr;
-            z -> child -> left -> right = z -> child -> right;
-            z -> child -> right -> left = z -> child -> left;
-
-            z -> child -> right = z -> right;
-            z -> child -> left = z;
-            z -> right -> left = z -> child;
-            z -> right  = z -> child;
-
-            (z -> degree)--;
-            z -> child = (z -> degree) ? tmp : nullptr;
+        // move child to root list
+        if (z -> child) {
+            FibHeapNode<T> *c = z -> child, *current;
+            c -> left -> right = nullptr; // break loop
+            while (c) {
+                current = c -> right;
+                _link_insert(z, c);
+                c = current;
+            }
         }
 
+        // delete z
         if (_heap == z) _heap = z -> right;
-        z -> left -> right = z -> right;
-        z -> right -> left = z -> left;
+        _link_erase(z);
 
         _size--;
+        _max = nullptr;
 
-        // consolidate the root list
-        if (z == z -> right) {
-            _heap = _max = nullptr;
-        } else {
-            _max = nullptr;
+        // merge root list and reset max
+        if (_size) {
             _consolidate();
+        } else {
+            _heap = nullptr;
         }
+
+        delete z;
     }
-    delete z;
 }
 
 template <class T>
@@ -163,13 +168,15 @@ void FibPriorityQueue<T>::_consolidate() {
 
     FibHeapNode<T> *degrees[b] = { 0 };
     FibHeapNode<T> *current = _heap;
+
     do {
         int c = current -> degree;
         while (degrees[c]) {
             FibHeapNode<T> *y = degrees[c];
 
-            if (current == y) break; // important!
+            if (current == y) break; // important! get rid of duplicate
 
+            // insure current is the max
             if (y -> value > current -> value) {
                 FibHeapNode<T> *tmp = current;
                 current = y;
@@ -178,22 +185,16 @@ void FibPriorityQueue<T>::_consolidate() {
 
             // make y out of root list
             if (_heap == y) _heap = _heap -> right;
-            y -> right -> left = y -> left;
-            y -> left -> right = y -> right;
+            _link_erase(y);
 
             // link y to current
             if (current -> child) {
-                y -> p = current;
-                y -> right = current -> child -> right;
-                y -> left = current -> child;
-                current -> child -> right -> left = y;
-                current -> child -> right = y;
+                _link_insert(current -> child, y);
             } else {
                 current -> child = y;
                 // pay attention to node initialize!
                 y -> right = y;
                 y -> left = y;
-                y -> p = current;
             }
 
             degrees[c] = nullptr;
