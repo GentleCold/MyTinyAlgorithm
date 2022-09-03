@@ -9,6 +9,7 @@
 #include "../Algorithm/StackAndQueue/array_stack.h"
 #include "../Algorithm/StackAndQueue/array_queue.h"
 #include "../Algorithm/StackAndQueue/priority_queue.h"
+#include "../Algorithm/StackAndQueue/fib_priority_queue.h"
 #include "../Algorithm/StackAndQueue/Application/heap_sort.h"
 
 static void test_array_queue() {
@@ -77,6 +78,38 @@ static void test_priority_queue() {
         v.pop();
     }
     EXPECT_EQ_INT(9, v.top());
+    for (int i = 0; i < 9; i++) {
+        v.pop();
+    }
+    EXPECT_EQ_INT(0, v.top());
+}
+
+static void test_fib_priority_queue() {
+    myalm::FibPriorityQueue<int> v;
+
+    for (int i = 0; i < 15; i++) {
+        v.push(i);
+    }
+    EXPECT_EQ_INT(14, v.top());
+    for (int i = 0; i < 5; i++) {
+        v.pop();
+    }
+    EXPECT_EQ_INT(9, v.top());
+    for (int i = 0; i < 9; i++) {
+        v.pop();
+    }
+    EXPECT_EQ_INT(0, v.top());
+
+    myalm::FibPriorityQueue<int> v2;
+    for (int i = 0; i < 15; i++) {
+        v2.push(i);
+    }
+    v.merge(v2);
+    EXPECT_EQ_INT(14, v.top());
+    v.push(20);
+    v.push(20);
+    v.pop();
+    EXPECT_EQ_INT(20, v.top());
 }
 
 // Application
@@ -106,6 +139,7 @@ void test_stack_and_queue() {
     test_array_queue();
     test_array_stack();
     test_priority_queue();
+    test_fib_priority_queue();
 
     test_heap_sort();
 }

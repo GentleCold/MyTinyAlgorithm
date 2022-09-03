@@ -43,7 +43,7 @@ template <class T>
 void PriorityQueue<T>::_setCapacity(int newCapacity) {
     assert(newCapacity > _size);
     T* tmp = new T[newCapacity];
-    std::copy(_heap, _heap + _size + 1, tmp);
+    std::copy(_heap, _heap + _size + 1, tmp); // pay attention to the _size
     delete [] _heap;
     _heap = tmp;
     _capacity = newCapacity;
@@ -106,7 +106,7 @@ template <class T>
 void PriorityQueue<T>::initialize(T *heap, int size) {
     delete [] _heap;
     _heap = new T[10];
-    _size = size;
+    _size = 0;
     _capacity = 10;
 
     while (size) {
