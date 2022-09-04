@@ -87,15 +87,15 @@ static void test_priority_queue() {
 static void test_fib_priority_queue() {
     myalm::FibPriorityQueue<int> v;
 
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 150; i++) {
         v.push(i);
     }
-    EXPECT_EQ_INT(14, v.top());
-    for (int i = 0; i < 5; i++) {
+    EXPECT_EQ_INT(149, v.top());
+    for (int i = 0; i < 50; i++) {
         v.pop();
     }
-    EXPECT_EQ_INT(9, v.top());
-    for (int i = 0; i < 9; i++) {
+    EXPECT_EQ_INT(99, v.top());
+    for (int i = 0; i < 99; i++) {
         v.pop();
     }
     EXPECT_EQ_INT(0, v.top());

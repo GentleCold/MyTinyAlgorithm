@@ -12,7 +12,9 @@
 |    ArrayStack    |        基于数组的栈        |                 -                 |
 |  PriorityQueue   |  基于数组的最大优先队列（二叉堆实现）  |             heap_sort             |
 | FibPriorityQueue | 基于链表的最大优先队列（斐波那契堆实现） |                 -                 |
+| HashMap //TODO |  基于数组的散列表（开放寻址法实现）   |                 -                 |
 |    BinaryTree    |       基于链表的二叉树       |                 -                 |
+| BinarySearchTree |  基于BinaryTree的二叉搜索树  |                 -                 |
 
 ## LICENCE
 

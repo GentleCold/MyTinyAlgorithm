@@ -13,11 +13,9 @@ namespace myalm {
 template <class T>
 struct BinaryTreeNode {
     T value;
-    BinaryTreeNode<T> *left = nullptr, *right = nullptr;
+    BinaryTreeNode<T> *left = nullptr, *right = nullptr, *p;
 
-    explicit BinaryTreeNode(const T& value) {
-        this -> value = value;
-    }
+    explicit BinaryTreeNode(const T& value): value(value) { p = this; }
 
     BinaryTreeNode(const T& value, BinaryTreeNode<T> *left, BinaryTreeNode<T> *right) {
         this -> value = value;
@@ -63,11 +61,12 @@ public:
         _size = 0;
     }
 
-private:
+protected:
     BinaryTreeNode<T> *_root = nullptr;
     int _size = 0;
-    static void (*_visit)(BinaryTreeNode<T> *t) = nullptr;
 
+private:
+    static void (*_visit)(BinaryTreeNode<T> *t);
     static void _pre_order(BinaryTreeNode<T> *t);
     static void _in_order(BinaryTreeNode<T> *t);
     static void _post_order(BinaryTreeNode<T> *t);
@@ -75,6 +74,10 @@ private:
 
     static void _dispose(BinaryTreeNode<T> *t) { delete t; }
 };
+
+// declare or error
+template <class T>
+void (*BinaryTree<T>::_visit)(BinaryTreeNode<T> *t);
 
 template <class T>
 void BinaryTree<T>::_pre_order(BinaryTreeNode<T> *t) {
