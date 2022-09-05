@@ -70,6 +70,15 @@ static void test_red_black_tree() {
     v.insert(std::pair<char, int>('h', 4));
     v.insert(std::pair<char, int>('a', 1));
     EXPECT_EQ_INT(1, v.find('a') -> second);
+    v.erase('a');
+    v.erase('h');
+    v.erase('z');
+    v.erase('c');
+    v.erase('d');
+    v.erase('g');
+    v.erase('e');
+    v.erase('b');
+    v.erase('f');
 #ifdef DEBUG
     EXPECT_EQ_INT(0, v.test_if_red_black_tree());
 #endif

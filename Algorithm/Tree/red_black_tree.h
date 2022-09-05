@@ -76,7 +76,123 @@ void RedBlackTree<K, V>::insert(const std::pair<const K, V> &v) {
 
 template <class K, class V>
 void RedBlackTree<K, V>::erase(const K& key) {
-    //todo
+    BinaryTreeNode<std::pair<const K, V>> *p = BinarySearchTree<K, V>::_search(key);
+    if (!p) return;
+
+    BinaryTreeNode<std::pair<const K, V>> *c = (p -> right) ? p -> right : p -> left, *x = c, *xp = p -> p;
+    bool color = p -> color;
+
+    // have both right and left
+    if (p -> right && p -> left) {
+        c = BinarySearchTree<K, V>::_next(p);
+        // c must have
+        // c is not child of p, make p = c, delete c, c -> right is another c, save in x
+        color = c -> color;
+        c -> color = p -> color;
+        x = c -> right;
+
+        if (c == p -> right) {
+            xp = c; // in this case, c -> p == p is deleted and xp is still c
+
+            c -> left = p -> left;
+            p -> left -> p = c;
+        } else {
+            x = c -> right;
+            xp = c -> p;
+
+            c -> p -> left = c -> right;
+            if (c -> right) c -> right -> p = c -> p; // pay attention to nullptr case
+
+            c -> left = p -> left;
+            c -> right = p -> right;
+            p -> left -> p = c;
+            p -> right -> p = c;
+        }
+    }
+
+    // set parent node
+    if (p -> p != p) {
+        if (key > p -> p -> value.first) {
+            p -> p -> right = c;
+        } else {
+            p -> p -> left = c;
+        }
+        if (c) c -> p = p -> p;
+    } else {
+        // if delete root
+        BinaryTree<std::pair<const K, V>>::_root = c;
+        if (c) c -> p = c;
+    }
+
+    delete p;
+    if (!(--BinaryTree<std::pair<const K, V>>::_size)) return;
+
+    // justify color, in this case, p have zero or one child
+    if (!color && xp) {
+        // x is not root and x -> color is black or x is nullptr
+        while (!x || (!x -> color && x -> p != x)) {
+            // in this case, x must have an uncle
+            if (xp -> left == x) {
+                BinaryTreeNode<std::pair<const K, V>> *u = xp -> right;
+                if (u -> color) { // case 1
+                    u -> color = false;
+                    xp -> color = true;
+                    _left_rotate(xp);
+                    u = xp -> right;
+                }
+
+                if (!x || (!u -> left -> color && !u -> right -> color)) { // case 2
+                    u -> color = true;
+                    x = xp;
+                    xp = x -> p;
+                    continue;
+                }
+
+                if (u -> left -> color && !u -> right -> color) { // case 3
+                    u -> color = true;
+                    u -> left -> color = false;
+                    _right_rotate(u);
+                    u = xp -> right;
+                }
+
+                // case 4
+                u -> color = xp -> color;
+                xp -> color = false;
+                _left_rotate(xp);
+                x = BinaryTree<std::pair<const K, V>>::_root;
+            } else { // the same
+                BinaryTreeNode<std::pair<const K, V>> *u = xp -> left;
+                if (u -> color) { // case 1
+                    u -> color = false;
+                    xp -> color = true;
+                    _right_rotate(xp);
+                    u = xp -> left;
+                }
+
+                if (!x || (!u -> left -> color && !u -> right -> color)) { // case 2
+                    u -> color = true;
+                    x = xp;
+                    xp = x -> p;
+                    continue;
+                }
+
+                if (u -> right -> color && !u -> left -> color) { // case 3
+                    u -> color = true;
+                    u -> right -> color = false;
+                    _left_rotate(u);
+                    u = xp -> left;
+                }
+
+                // case 4
+                u -> color = xp -> color;
+                xp -> color = false;
+                _right_rotate(xp);
+                x = BinaryTree<std::pair<const K, V>>::_root;
+            }
+        }
+
+        x -> color = false;
+    }
 }
 
 template <class K, class V>
@@ -126,7 +242,8 @@ void RedBlackTree<K, V>::_right_rotate(BinaryTreeNode <std::pair<const K, V>> *x
 template <class K, class V>
 int RedBlackTree<K, V>::test_if_red_black_tree() {
     BinaryTreeNode<std::pair<const K, V>> *p = BinaryTree<std::pair<const K, V>>::_root;
-    if (!p || p -> color) return 1; // root error
+    if (!p) return 0;
+    if (p -> color) return 1; // root color error
     if (_test_if_black_height_equal(p) == -1) return 2; // black height error
     if (!_test_if_red_link_red(p)) return 3; // red link red error
     if (!BinarySearchTree<K, V>::test_if_binary_search_tree()) return 4; // binary search tree error

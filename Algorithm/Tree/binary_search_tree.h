@@ -43,44 +43,43 @@ void BinarySearchTree<K, V>::insert(const std::pair<const K, V>& v) {
 template <class K, class V>
 void BinarySearchTree<K, V>::erase(const K& key) {
     BinaryTreeNode<std::pair<const K, V>> *p = _search(key);
+    if (!p) return;
 
-    if (p) {
-        BinaryTreeNode<std::pair<const K, V>> *c = (p -> right) ? p -> right : p -> left;
+    BinaryTreeNode<std::pair<const K, V>> *c = (p -> right) ? p -> right : p -> left;
 
-        // have both right and left
-        if (p -> right && p -> left) {
-            c = _next(p);
-            if (c == p -> right) {
-                c -> left = p -> left;
-                p -> left -> p = c;
-            } else {
-                c -> p -> left = c -> right;
-                if (c -> right) c -> right -> p = c -> p; // pay attention to nullptr case
+    // have both right and left
+    if (p -> right && p -> left) { // case 3
+        c = _next(p);
+        if (c == p -> right) { // case 3.1
+            c -> left = p -> left;
+            p -> left -> p = c;
+        } else { // case 3.2
+            c -> p -> left = c -> right;
+            if (c -> right) c -> right -> p = c -> p; // pay attention to nullptr case
 
-                c -> left = p -> left;
-                c -> right = p -> right;
-                p -> left -> p = c;
-                p -> right -> p = c;
-            }
+            c -> left = p -> left;
+            c -> right = p -> right;
+            p -> left -> p = c;
+            p -> right -> p = c;
         }
-
-        // set parent node
-        if (p -> p != p) {
-            if (key > p -> p -> value.first) {
-                p -> p -> right = c;
-            } else {
-                p -> p -> left = c;
-            }
-            if (c) c -> p = p -> p;
-        } else {
-            // if delete root
-            BinaryTree<std::pair<const K, V>>::_root = c;
-            if (c) c -> p = c;
-        }
-
-        BinaryTree<std::pair<const K, V>>::_size--;
-        delete p;
     }
+
+    // set parent node
+    if (p -> p != p) {
+        if (key > p -> p -> value.first) {
+            p -> p -> right = c;
+        } else {
+            p -> p -> left = c;
+        }
+        if (c) c -> p = p -> p;
+    } else {
+        // if delete root
+        BinaryTree<std::pair<const K, V>>::_root = c;
+        if (c) c -> p = c;
+    }
+
+    BinaryTree<std::pair<const K, V>>::_size--;
+    delete p;
 }
 
 template <class K, class V>
