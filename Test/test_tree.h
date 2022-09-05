@@ -8,6 +8,7 @@
 #include <string>
 #include "test.h"
 #include "../Algorithm/Tree/binary_search_tree.h"
+#include "../Algorithm/Tree/red_black_tree.h"
 
 static void test_binary_search_tree() {
     myalm::BinarySearchTree<char, int> v;
@@ -19,6 +20,10 @@ static void test_binary_search_tree() {
     v.insert(std::pair<char, int>('e', 11));
     v.insert(std::pair<char, int>('g', 12));
     v.insert(std::pair<char, int>('z', 13));
+
+#ifdef DEBUG
+    EXPECT_EQ_TRUE(v.test_if_binary_search_tree());
+#endif
 
     EXPECT_EQ_INT(10, v.find('a') -> second);
     EXPECT_EQ_INT(12, v.find('g') -> second);
@@ -45,10 +50,34 @@ static void test_binary_search_tree() {
     v2.insert(std::pair<std::string, int>("aa", 2));
     v2.erase("ab");
     EXPECT_EQ_INT(1, v2.max() -> second);
+    v2.erase("ab");
+    v2.erase("aa");
+    v2.erase("ac");
+    v2.erase("error");
+    EXPECT_EQ_TRUE(v2.empty());
+}
+
+static void test_red_black_tree() {
+    myalm::RedBlackTree<char, int> v;
+    v.insert(std::pair<char, int>('a', 0));
+    v.insert(std::pair<char, int>('b', 1));
+    v.insert(std::pair<char, int>('c', 2));
+    v.insert(std::pair<char, int>('d', 3));
+    v.insert(std::pair<char, int>('e', 0));
+    v.insert(std::pair<char, int>('f', 1));
+    v.insert(std::pair<char, int>('g', 2));
+    v.insert(std::pair<char, int>('z', 3));
+    v.insert(std::pair<char, int>('h', 4));
+    v.insert(std::pair<char, int>('a', 1));
+    EXPECT_EQ_INT(1, v.find('a') -> second);
+#ifdef DEBUG
+    EXPECT_EQ_INT(0, v.test_if_red_black_tree());
+#endif
 }
 
 void test_tree() {
     test_binary_search_tree();
+    test_red_black_tree();
 }
 
 #endif //MYTINYALGORITHM_TEST_TREE_H

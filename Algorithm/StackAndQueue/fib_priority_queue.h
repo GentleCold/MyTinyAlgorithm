@@ -166,7 +166,8 @@ void FibPriorityQueue<T>::_consolidate() {
         b++;
     }
 
-    FibHeapNode<T> *degrees[b] = { 0 };
+    auto *degrees = new FibHeapNode<T> *[b];
+    for (int i = 0; i < b; i++) degrees[i] = nullptr;
     FibHeapNode<T> *current = _heap;
 
     do {
@@ -205,6 +206,8 @@ void FibPriorityQueue<T>::_consolidate() {
         degrees[c] = current;
         current = current -> right;
     } while (current != _heap);
+
+    delete [] degrees;
 
     // get max
     current = _heap -> right;

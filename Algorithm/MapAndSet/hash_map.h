@@ -132,6 +132,7 @@ void HashMap<K, V>::erase(const K &k) {
 
     if (_table[i] == nullptr || _table[i] -> first != k) return;
 
+    _size--; // decrease _size
     delete _table[i];
     _table[i] = nullptr;
     _f[i] = true;

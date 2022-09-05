@@ -7,6 +7,8 @@
 #include "test_stack_and_queue.h"
 #include "test_map_and_set.h"
 
+//#pragma GCC optimize(2)
+
 void test_all() {
     test_linear_list();
     test_tree();

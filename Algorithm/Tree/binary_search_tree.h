@@ -18,10 +18,16 @@ public:
     std::pair<const K, V>* min() const;
     std::pair<const K, V>* prev(const K&) const;
     std::pair<const K, V>* next(const K&) const;
-    void insert(const std::pair<const K, V>&);
-    void erase(const K&);
+    virtual void insert(const std::pair<const K, V>&);
+    virtual void erase(const K&);
+
+#ifdef DEBUG
+    bool test_if_binary_search_tree();
+    bool _test_if_binary_search_tree(BinaryTreeNode<std::pair<const K, V>>*);
+#endif
 
 protected:
+    BinaryTreeNode<std::pair<const K, V>>* _insert(const std::pair<const K, V> &);
     BinaryTreeNode<std::pair<const K, V>>* _search(const K&) const;
     BinaryTreeNode<std::pair<const K, V>>* _prev(BinaryTreeNode<std::pair<const K, V>> *) const;
     BinaryTreeNode<std::pair<const K, V>>* _next(BinaryTreeNode<std::pair<const K, V>> *) const;
@@ -30,50 +36,13 @@ protected:
 };
 
 template <class K, class V>
-void BinarySearchTree<K, V>::insert(const std::pair<const K, V> &v) {
-    BinaryTreeNode<std::pair<const K, V>> *p = BinaryTree<std::pair<const K, V>>::_root,
-                                          *pp = nullptr;
-    while (p) {
-        pp = p;
-        if (p -> value.first > v.first) {
-            p = p -> left;
-        } else if (p -> value.first < v.first) {
-            p = p -> right;
-        } else {
-            p -> value.second = v.second;
-            return;
-        }
-    }
-
-    auto *node = new BinaryTreeNode<std::pair<const K, V>>(v);
-    if (!BinaryTree<std::pair<const K, V>>::_root) {
-        BinaryTree<std::pair<const K, V>>::_root = node;
-    } else {
-        if (pp -> value.first > v.first) {
-            pp -> left = node;
-        } else {
-            pp -> right = node;
-        }
-        node -> p = pp;
-    }
-
-    BinaryTree<std::pair<const K, V>>::_size++;
+void BinarySearchTree<K, V>::insert(const std::pair<const K, V>& v) {
+    _insert(v);
 }
 
 template <class K, class V>
 void BinarySearchTree<K, V>::erase(const K& key) {
-    BinaryTreeNode<std::pair<const K, V>> *p = BinaryTree<std::pair<const K, V>>::_root,
-                                          *pp = nullptr;
-    while (p) {
-        if (p -> value.first > key) {
-            p = p -> left;
-        } else if (p -> value.first < key) {
-            p = p -> right;
-        } else {
-            break;
-        }
-        pp = p;
-    }
+    BinaryTreeNode<std::pair<const K, V>> *p = _search(key);
 
     if (p) {
         BinaryTreeNode<std::pair<const K, V>> *c = (p -> right) ? p -> right : p -> left;
@@ -86,7 +55,7 @@ void BinarySearchTree<K, V>::erase(const K& key) {
                 p -> left -> p = c;
             } else {
                 c -> p -> left = c -> right;
-                c -> right -> p = c -> p;
+                if (c -> right) c -> right -> p = c -> p; // pay attention to nullptr case
 
                 c -> left = p -> left;
                 c -> right = p -> right;
@@ -96,18 +65,20 @@ void BinarySearchTree<K, V>::erase(const K& key) {
         }
 
         // set parent node
-        if (pp) {
-            if (key > pp -> value.first) {
-                pp -> right = c;
+        if (p -> p != p) {
+            if (key > p -> p -> value.first) {
+                p -> p -> right = c;
             } else {
-                pp -> left = c;
+                p -> p -> left = c;
             }
-            c -> p = pp;
+            if (c) c -> p = p -> p;
         } else {
+            // if delete root
             BinaryTree<std::pair<const K, V>>::_root = c;
-            c -> p = c;
+            if (c) c -> p = c;
         }
 
+        BinaryTree<std::pair<const K, V>>::_size--;
         delete p;
     }
 }
@@ -137,6 +108,39 @@ std::pair<const K, V>* BinarySearchTree<K, V>::max() const {
 template <class K, class V>
 std::pair<const K, V>* BinarySearchTree<K, V>::min() const {
     return (_max(BinaryTree<std::pair<const K, V>>::_root)) ? &_min(BinaryTree<std::pair<const K, V>>::_root) -> value : nullptr;
+}
+
+template <class K, class V>
+BinaryTreeNode<std::pair<const K, V>>* BinarySearchTree<K, V>::_insert(const std::pair<const K, V> &v) {
+    // return address of new node, if exiting, return nullptr
+    BinaryTreeNode<std::pair<const K, V>> *p = BinaryTree<std::pair<const K, V>>::_root,
+                                          *pp = nullptr;
+    while (p) {
+        pp = p;
+        if (p -> value.first > v.first) {
+            p = p -> left;
+        } else if (p -> value.first < v.first) {
+            p = p -> right;
+        } else {
+            p -> value.second = v.second;
+            return nullptr;
+        }
+    }
+
+    auto *node = new BinaryTreeNode<std::pair<const K, V>>(v);
+    if (!BinaryTree<std::pair<const K, V>>::_root) {
+        BinaryTree<std::pair<const K, V>>::_root = node;
+    } else {
+        if (pp -> value.first > v.first) {
+            pp -> left = node;
+        } else {
+            pp -> right = node;
+        }
+        node -> p = pp;
+    }
+
+    BinaryTree<std::pair<const K, V>>::_size++;
+    return node;
 }
 
 template <class K, class V>
@@ -206,7 +210,33 @@ BinaryTreeNode<std::pair<const K, V>>* BinarySearchTree<K, V>::_next(BinaryTreeN
     return nullptr;
 }
 
+// test function
 
+#ifdef DEBUG
+template <class K, class V>
+bool BinarySearchTree<K, V>::test_if_binary_search_tree() {
+    BinaryTreeNode<std::pair<const K, V>> *p = BinaryTree<std::pair<const K, V>>::_root;
+    BinaryTree<std::pair<const K, V>>::_root = nullptr;
+    bool flag = _test_if_binary_search_tree(p);
+    BinaryTree<std::pair<const K, V>>::_root = p;
+    return flag;
+}
+
+template <class K, class V>
+bool BinarySearchTree<K, V>::_test_if_binary_search_tree(BinaryTreeNode<std::pair<const K, V>>* p) {
+    if (!p) return true;
+    if (!_test_if_binary_search_tree(p -> left)) return false;
+
+    if (!BinaryTree<std::pair<const K, V>>::_root) {
+        BinaryTree<std::pair<const K, V>>::_root = p;
+        return true;
+    } else if (p -> value.first < BinaryTree<std::pair<const K, V>>::_root -> value.first) return false;
+
+    BinaryTree<std::pair<const K, V>>::_root = p;
+    if (!_test_if_binary_search_tree(p -> right)) return false;
+    return true;
+}
+#endif
 
 }
 

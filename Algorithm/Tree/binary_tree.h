@@ -12,6 +12,7 @@ namespace myalm {
 
 template <class T>
 struct BinaryTreeNode {
+    bool color = true; // true = red
     T value;
     BinaryTreeNode<T> *left = nullptr, *right = nullptr, *p;
 

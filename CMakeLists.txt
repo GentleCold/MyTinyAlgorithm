@@ -11,3 +11,7 @@ set(EXECUTABLE_OUTPUT_PATH ${BUILD_PATH}) # EXE
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BUILD_PATH}) # LIB
 
 add_executable(TestAll ${TEST_PATH}/test_all.cpp)
+
+if(CMAKE_BUILD_TYPE AND (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+    add_definitions(-DDEBUG)
+endif()
