@@ -157,6 +157,7 @@ void RedBlackTree<K, V>::erase(const K& key) {
 
                 // case 4
                 u -> color = xp -> color;
+                u -> right -> color = false;
                 xp -> color = false;
                 _left_rotate(xp);
                 x = BinaryTree<std::pair<const K, V>>::_root;
