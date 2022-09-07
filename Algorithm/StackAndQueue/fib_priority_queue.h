@@ -143,8 +143,11 @@ const T& FibPriorityQueue<T>::top() const {
 template <class T>
 void FibPriorityQueue<T>::merge(FibPriorityQueue<T>& v) {
     _heap -> left -> right = v._heap;
+
+    FibHeapNode<T> *tmp = v._heap -> left;
     v._heap -> left = _heap -> left;
-    _heap -> left = v._heap -> left;
+    _heap -> left = tmp;
+
     _heap -> left -> right = _heap;
 
     if (!_max || (v._max && v._max -> value > _max -> value))
